@@ -9,9 +9,13 @@
 # The transpose of a matrix is obtained by flipping rows and columns.
 
 def transpose_matrix(a: list[list[int|float]]) -> list[list[int|float]]:
-	
-    
-	return b
+    b=[]
+    for i in range (len(a[0])):
+        result=[]
+        for j in range (len(a)):
+            result.append(a[j][i])
+        b.append(result)
+    return b
 
 
 #tensor.t() 2-->2 dimension
