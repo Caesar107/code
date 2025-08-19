@@ -130,7 +130,73 @@ class Solution(object):
                 B=headA
         return A
 
-    
+# ACM/竞赛模式：从标准输入读取，手动构造链表并求交点
+
+import sys
+
+class ListNode:
+    def __init__(self, x, nxt=None):
+        self.val = x
+        self.next = nxt
+
+class Solution:
+    def getIntersectionNode(self, headA, headB):
+        pA, pB = headA, headB
+        while pA is not pB:
+            pA = pA.next if pA else headB
+            pB = pB.next if pB else headA
+        return pA  # 可能是交点节点，也可能是 None
+
+def build_list(arr):
+    """由数组构造单链表，返回头节点与数组对应的所有节点列表（便于按索引取节点）"""
+    dummy = ListNode(0)
+    cur = dummy
+    nodes = []
+    for v in arr:
+        cur.next = ListNode(v)
+        cur = cur.next
+        nodes.append(cur)
+    return dummy.next, nodes
+
+def main():
+    data = []
+    for line in sys.stdin:
+        line = line.strip()
+        if line:
+            data.append(line)
+    # 期望 5 行输入
+    if len(data) < 5:
+        print("null")
+        return
+
+    intersectVal = int(data[0])
+    m, n = map(int, data[1].split())
+    listA = list(map(int, data[2].split()))
+    listB = list(map(int, data[3].split()))
+    skipA, skipB = map(int, data[4].split())
+
+    # 构造两条链表
+    headA, nodesA = build_list(listA)
+    headB, nodesB = build_list(listB)
+
+    # 根据 intersectVal/skipA/skipB 建立“相交”
+    # 与 LeetCode 自定义评测一致：如果 intersectVal != 0，
+    # 让 B 的第 skipB 个节点.next 指向 A 的第 skipA 个节点（两者应当值相等）
+    if intersectVal != 0:
+        # 安全检查：索引合法且值匹配（不匹配也照样连，值仅用于人类校验）
+        if 0 <= skipA < len(nodesA) and 0 <= skipB < len(nodesB):
+            nodesB[skipB].next = nodesA[skipA]
+
+    # 调用算法
+    inter = Solution().getIntersectionNode(headA, headB)
+    if inter:
+        print(inter.val)
+    else:
+        print("null")
+
+if __name__ == "__main__":
+    main()
+
             
 
 
